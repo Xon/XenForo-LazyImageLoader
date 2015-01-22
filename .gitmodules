@@ -1,0 +1,3 @@
+[submodule "upload/js/SV/LazyImageLoader"]
+	path = upload/js/SV/LazyImageLoader
+	url = https://github.com/Xon/unveil.git
