@@ -48,8 +48,8 @@
     <phrase title="option_group_SV_LazyLoader_description" version_id="1" version_string="0.0.1"><![CDATA[Do less loading.]]></phrase>
     <phrase title="option_SV_LazyLoaderSpinner" version_id="1" version_string="0.0.1"><![CDATA[Lazy Loader Spinner]]></phrase>
     <phrase title="option_SV_LazyLoaderSpinner_explain" version_id="1" version_string="0.0.1"><![CDATA[Allows the lazy loader spinner to be replaced.]]></phrase>
-    <phrase title="option_SV_LazyLoader_EnableDefault" version_id="100001" version_string="1.0.01"><![CDATA[Enable By Default]]></phrase>
-    <phrase title="option_SV_LazyLoader_EnableDefault_explain" version_id="100001" version_string="1.0.01"><![CDATA[By enabling by default, the lazy-load will be applied to bbcode anywhere. Otherwise user-group permissions will control access.]]></phrase>
+    <phrase title="option_SV_LazyLoader_EnableDefault" version_id="100001" version_string="1.0.01"><![CDATA[Enable Outside threads/conversations]]></phrase>
+    <phrase title="option_SV_LazyLoader_EnableDefault_explain" version_id="100001" version_string="1.0.01"><![CDATA[By default, lazy loading is disabled outside of threads or conversations for areas which use bb code.]]></phrase>
     <phrase title="option_SV_LazyLoader_PixelThreshold" version_id="1" version_string="0.0.1"><![CDATA[Threshold]]></phrase>
     <phrase title="option_SV_LazyLoader_PixelThreshold_explain" version_id="1" version_string="0.0.1"><![CDATA[Specify how close in pixels the user needs to scroll to before an image is queued for loading.]]></phrase>
     <phrase title="option_SV_LazyLoader_Spinner" version_id="1" version_string="0.0.1"><![CDATA[Lazy Loader Spinner]]></phrase>
