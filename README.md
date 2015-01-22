@@ -25,7 +25,7 @@ For "Forum Permissions" and "Conversation Permissions" sections.
 
 - Interaction with the Spoiler tag means you need to move the viewport after opening the spoiler box before the lazy loader realises it should load those images.
 - Doesn't work with XenForo Media Gallery.
-- Requires "Enable Outside threads/Conversations" set to true to work with Resource Manager.
+- Doesn't work with Resource Manager.
 - May impact SEO due to the use of noscript to present the original image to users without scripting. Will display the spinner too.
 - Loading spinner is ugly, and not per style.
 
