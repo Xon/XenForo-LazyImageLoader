@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="SV_LazyImageLoader" title="Lazy Image Loader" version_string="0.0.1" version_id="1" url="" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+<addon addon_id="SV_LazyImageLoader" title="Lazy Image Loader" version_string="1.0.0" version_id="100000" url="" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -8,51 +8,67 @@
   <code_events/>
   <code_event_listeners>
     <listener event_id="load_class" execute_order="10" callback_class="SV_LazyImageLoader_Listener" callback_method="load_class" active="1" hint="XenForo_BbCode_Formatter_Base" description="XenForo_BbCode_Formatter_Base"/>
+    <listener event_id="load_class" execute_order="10" callback_class="SV_LazyImageLoader_Listener" callback_method="load_class" active="1" hint="XenForo_ControllerPublic_Thread" description="XenForo_ControllerPublic_Thread"/>
+    <listener event_id="load_class" execute_order="10" callback_class="SV_LazyImageLoader_Listener" callback_method="load_class" active="1" hint="XenForo_ControllerPublic_Conversation" description="XenForo_ControllerPublic_Conversation"/>
   </code_event_listeners>
   <cron/>
   <email_templates/>
   <email_template_modifications/>
   <optiongroups>
-    <option option_id="SV_LazyLoaderSpinner" edit_format="textbox" data_type="string" can_backup="1">
+    <group group_id="SV_LazyLoader" display_order="535" debug_only="0"/>
+    <option option_id="SV_LazyLoader_PixelThreshold" edit_format="spinbox" data_type="positive_integer" can_backup="1">
+      <default_value>200</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="SV_LazyLoader" display_order="100"/>
+    </option>
+    <option option_id="SV_LazyLoader_Spinner" edit_format="textbox" data_type="string" can_backup="1">
       <default_value>/styles/SV/LazyImageLoader/loader.gif</default_value>
       <edit_format_params></edit_format_params>
       <sub_options></sub_options>
-      <relation group_id="debug" display_order="100000"/>
+      <relation group_id="SV_LazyLoader" display_order="100000"/>
     </option>
   </optiongroups>
   <permissions>
     <permission_groups/>
-    <permissions/>
+    <permissions>
+      <permission permission_group_id="conversation" permission_id="sv_lazyload_enable" permission_type="flag" default_value="unset" interface_group_id="conversationPermissions" display_order="15"/>
+      <permission permission_group_id="forum" permission_id="sv_lazyload_enable" permission_type="flag" default_value="unset" interface_group_id="forumPermissions" display_order="1300"/>
+    </permissions>
     <interface_groups/>
   </permissions>
   <phrases>
+    <phrase title="option_group_SV_LazyLoader" version_id="1" version_string="0.0.1"><![CDATA[Image Lazy Loader]]></phrase>
+    <phrase title="option_group_SV_LazyLoader_description" version_id="1" version_string="0.0.1"><![CDATA[Do less loading.]]></phrase>
     <phrase title="option_SV_LazyLoaderSpinner" version_id="1" version_string="0.0.1"><![CDATA[Lazy Loader Spinner]]></phrase>
     <phrase title="option_SV_LazyLoaderSpinner_explain" version_id="1" version_string="0.0.1"><![CDATA[Allows the lazy loader spinner to be replaced.]]></phrase>
+    <phrase title="option_SV_LazyLoader_PixelThreshold" version_id="1" version_string="0.0.1"><![CDATA[Threshold]]></phrase>
+    <phrase title="option_SV_LazyLoader_PixelThreshold_explain" version_id="1" version_string="0.0.1"><![CDATA[Specify how close in pixels the user needs to scroll to before an image is queued for loading.]]></phrase>
+    <phrase title="option_SV_LazyLoader_Spinner" version_id="1" version_string="0.0.1"><![CDATA[Lazy Loader Spinner]]></phrase>
+    <phrase title="option_SV_LazyLoader_Spinner_explain" version_id="1" version_string="0.0.1"><![CDATA[Allows the lazy loader spinner to be replaced.]]></phrase>
+    <phrase title="permission_conversation_sv_lazyload_enable" version_id="1" version_string="0.0.1"><![CDATA[Enable Lazy Load Images]]></phrase>
+    <phrase title="permission_forum_sv_lazyload_enable" version_id="1" version_string="0.0.1"><![CDATA[Enable Lazy Load Images]]></phrase>
   </phrases>
   <route_prefixes/>
   <style_properties/>
   <templates>
     <template title="sv_lazyimageloader_container_js_body" version_id="1" version_string="0.0.1"><![CDATA[$(document).ready(function() {
-   $("img").unveil();
+   $("img").unveil({$xenOptions.SV_LazyLoader_PixelThreshold});
  }); ]]></template>
   </templates>
   <public_template_modifications>
-    <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach_full" description="Lazy Image Loader - Full Attachments" execution_order="10" enabled="1" action="str_replace">
-      <find><![CDATA[src="{xen:link full:attachments, $attachment}"]]></find>
-      <replace><![CDATA[src="<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='' />" data-$0]]></replace>
+    <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach_full" description="Lazy Image Loader - Full Attachments" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#src="({xen:link full:attachments, \$attachment})"#is]]></find>
+      <replace><![CDATA[<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$1' />]]></replace>
     </modification>
-    <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach_thumbnail" description="Lazy Image Loader - Thumbnails Attachments" execution_order="10" enabled="1" action="str_replace">
-      <find><![CDATA[src="{$attachment.thumbnailUrl}"]]></find>
-      <replace><![CDATA[src="<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='' />" data-$0]]></replace>
-    </modification>
-    <modification template="message" modification_key="sv_lazyimageloader_message" description="Lazy Image Loader" execution_order="10" enabled="1" action="str_replace">
-      <find><![CDATA[<xen:require css="message.css" />]]></find>
-      <replace><![CDATA[<xen:require js="js/SV/LazyImageLoader/jquery.unveil.js" />
-$0]]></replace>
+    <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach_thumbnail" description="Lazy Image Loader - Thumbnails Attachments" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#src="({\$attachment\.thumbnailUrl})"#is]]></find>
+      <replace><![CDATA[<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$1' />]]></replace>
     </modification>
     <modification template="page_container_js_body" modification_key="sv_lazyimageloader_page_container_js_body" description="Start Lazy Image Loader." execution_order="10" enabled="1" action="str_replace">
       <find><![CDATA[</script>]]></find>
-      <replace><![CDATA[<xen:include template="sv_lazyimageloader_container_js_body" />
+      <replace><![CDATA[<xen:require js="js/SV/LazyImageLoader/jquery.unveil.js" />
+<xen:include template="sv_lazyimageloader_container_js_body" />
 $0]]></replace>
     </modification>
   </public_template_modifications>
