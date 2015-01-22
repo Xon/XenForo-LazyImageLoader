@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="SV_LazyImageLoader" title="Lazy Image Loader" version_string="0.0.1" version_id="1" url="" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+  <admin_navigation/>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates/>
+  <admin_template_modifications/>
+  <code_events/>
+  <code_event_listeners>
+    <listener event_id="load_class" execute_order="10" callback_class="SV_LazyImageLoader_Listener" callback_method="load_class" active="1" hint="XenForo_BbCode_Formatter_Base" description="XenForo_BbCode_Formatter_Base"/>
+  </code_event_listeners>
+  <cron/>
+  <email_templates/>
+  <email_template_modifications/>
+  <optiongroups>
+    <option option_id="SV_LazyLoaderSpinner" edit_format="textbox" data_type="string" can_backup="1">
+      <default_value>/styles/SV/LazyImageLoader/loader.gif</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="debug" display_order="100000"/>
+    </option>
+  </optiongroups>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases>
+    <phrase title="option_SV_LazyLoaderSpinner" version_id="1" version_string="0.0.1"><![CDATA[Lazy Loader Spinner]]></phrase>
+    <phrase title="option_SV_LazyLoaderSpinner_explain" version_id="1" version_string="0.0.1"><![CDATA[Allows the lazy loader spinner to be replaced.]]></phrase>
+  </phrases>
+  <route_prefixes/>
+  <style_properties/>
+  <templates>
+    <template title="sv_lazyimageloader_container_js_body" version_id="1" version_string="0.0.1"><![CDATA[$(document).ready(function() {
+   $("img").unveil();
+ }); ]]></template>
+  </templates>
+  <public_template_modifications>
+    <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach_full" description="Lazy Image Loader - Full Attachments" execution_order="10" enabled="1" action="str_replace">
+      <find><![CDATA[src="{xen:link full:attachments, $attachment}"]]></find>
+      <replace><![CDATA[src="<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='' />" data-$0]]></replace>
+    </modification>
+    <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach_thumbnail" description="Lazy Image Loader - Thumbnails Attachments" execution_order="10" enabled="1" action="str_replace">
+      <find><![CDATA[src="{$attachment.thumbnailUrl}"]]></find>
+      <replace><![CDATA[src="<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='' />" data-$0]]></replace>
+    </modification>
+    <modification template="message" modification_key="sv_lazyimageloader_message" description="Lazy Image Loader" execution_order="10" enabled="1" action="str_replace">
+      <find><![CDATA[<xen:require css="message.css" />]]></find>
+      <replace><![CDATA[<xen:require js="js/SV/LazyImageLoader/jquery.unveil.js" />
+$0]]></replace>
+    </modification>
+    <modification template="page_container_js_body" modification_key="sv_lazyimageloader_page_container_js_body" description="Start Lazy Image Loader." execution_order="10" enabled="1" action="str_replace">
+      <find><![CDATA[</script>]]></find>
+      <replace><![CDATA[<xen:include template="sv_lazyimageloader_container_js_body" />
+$0]]></replace>
+    </modification>
+  </public_template_modifications>
+  <bb_code_media_sites/>
+  <bb_codes/>
+</addon>
