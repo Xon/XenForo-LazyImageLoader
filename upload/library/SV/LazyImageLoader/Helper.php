@@ -18,7 +18,7 @@ class SV_LazyImageLoader_Helper
     }
 
     static $lazy_loader_icon = null;
-    static $enable_lazyloading = false;
+    static $enable_lazyloading = null;
 
     public static function SetLazyLoadEnabled($value)
     {
@@ -32,23 +32,35 @@ class SV_LazyImageLoader_Helper
 
     public static function _getLoaderIcon()
     {
-        if (SV_LazyImageLoader_Helper::IsLazyLoadEnabled() && SV_LazyImageLoader_Helper::$lazy_loader_icon === null)
+        if (SV_LazyImageLoader_Helper::$lazy_loader_icon === null)
         {
-            $options = XenForo_Application::get("options");
-            $boardUrl = $options->boardUrl;
-
-            $spinnerURL =  $options->SV_LazyLoader_Spinner;
-            if ($spinnerURL == '')
+            if (SV_LazyImageLoader_Helper::$enable_lazyloading === null && XenForo_Application::get("options")->SV_LazyLoader_EnableDefault)
             {
-                $spinnerURL = $boardUrl;
+                SV_LazyImageLoader_Helper::$enable_lazyloading = true;
             }
+        
+            if (SV_LazyImageLoader_Helper::IsLazyLoadEnabled()) 
+            {        
+                $options = XenForo_Application::get("options");
+                $boardUrl = $options->boardUrl;
 
-            if (strpos($spinnerURL, '://') === false && strpos($spinnerURL,'/') !== 0)
+                $spinnerURL =  $options->SV_LazyLoader_Spinner;
+                if ($spinnerURL == '')
+                {
+                    $spinnerURL = $boardUrl;
+                }
+
+                if (strpos($spinnerURL, '://') === false && strpos($spinnerURL,'/') !== 0)
+                {
+                    $spinnerURL = $spinnerURL.'/styles/SV/LazyImageLoader/loader.gif';
+                }
+
+                SV_LazyImageLoader_Helper::$lazy_loader_icon = $spinnerURL;
+            }
+            else
             {
-                $spinnerURL = $spinnerURL.'/styles/SV/LazyImageLoader/loader.gif';
+                SV_LazyImageLoader_Helper::$lazy_loader_icon = false;
             }
-
-            SV_LazyImageLoader_Helper::$lazy_loader_icon = $spinnerURL;
         }
         return SV_LazyImageLoader_Helper::$lazy_loader_icon;
     }
