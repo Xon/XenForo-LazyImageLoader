@@ -20,13 +20,30 @@ class SV_LazyImageLoader_Helper
     static $lazy_loader_icon = null;
     static $enable_lazyloading = null;
 
+    protected static function InstallTemplateHelper()
+    {
+        if (SV_LazyImageLoader_Helper::$enable_lazyloading)
+        {
+            XenForo_Template_Helper_Core::$helperCallbacks['lazyloadstatus'] = array('SV_LazyImageLoader_Helper', 'IsLazyLoadEnabled');
+        }
+    }
+
     public static function SetLazyLoadEnabled($value)
     {
         SV_LazyImageLoader_Helper::$enable_lazyloading = $value;
+        SV_LazyImageLoader_Helper::InstallTemplateHelper();
     }
 
     public static function IsLazyLoadEnabled()
     {
+        if (SV_LazyImageLoader_Helper::$enable_lazyloading === null)
+        {
+            if (XenForo_Application::get("options")->SV_LazyLoader_EnableDefault)
+                SV_LazyImageLoader_Helper::$enable_lazyloading = true;
+            else
+                SV_LazyImageLoader_Helper::$enable_lazyloading = false;
+            SV_LazyImageLoader_Helper::InstallTemplateHelper();
+        }
         return SV_LazyImageLoader_Helper::$enable_lazyloading;
     }
 
@@ -34,13 +51,8 @@ class SV_LazyImageLoader_Helper
     {
         if (SV_LazyImageLoader_Helper::$lazy_loader_icon === null)
         {
-            if (SV_LazyImageLoader_Helper::$enable_lazyloading === null && XenForo_Application::get("options")->SV_LazyLoader_EnableDefault)
+            if (SV_LazyImageLoader_Helper::IsLazyLoadEnabled())
             {
-                SV_LazyImageLoader_Helper::$enable_lazyloading = true;
-            }
-        
-            if (SV_LazyImageLoader_Helper::IsLazyLoadEnabled()) 
-            {        
                 $options = XenForo_Application::get("options");
                 $boardUrl = $options->boardUrl;
 
