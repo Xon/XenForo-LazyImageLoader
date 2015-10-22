@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="SV_LazyImageLoader" title="Lazy Image Loader" version_string="1.0.3" version_id="100030" url="https://xenforo.com/community/resources/lazy-load-img.3979/" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+<addon addon_id="SV_LazyImageLoader" title="Lazy Image Loader" version_string="1.0.4" version_id="100040" url="https://xenforo.com/community/resources/lazy-load-img.3979/" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -34,6 +34,12 @@
       <sub_options></sub_options>
       <relation group_id="SV_LazyLoader" display_order="100000"/>
     </option>
+    <option option_id="sv_forceLazySpoilerTag" edit_format="onoff" data_type="boolean" can_backup="1">
+      <default_value>1</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="SV_LazyLoader" display_order="60"/>
+    </option>
   </optiongroups>
   <permissions>
     <permission_groups/>
@@ -46,6 +52,8 @@
   <phrases>
     <phrase title="option_group_SV_LazyLoader" version_id="1" version_string="0.0.1"><![CDATA[Image Lazy Loader]]></phrase>
     <phrase title="option_group_SV_LazyLoader_description" version_id="1" version_string="0.0.1"><![CDATA[Do less loading.]]></phrase>
+    <phrase title="option_sv_forceLazySpoilerTag" version_id="100040" version_string="1.0.4"><![CDATA[Force Lazy Loaded Spoiler]]></phrase>
+    <phrase title="option_sv_forceLazySpoilerTag_explain" version_id="100040" version_string="1.0.4"><![CDATA[]]></phrase>
     <phrase title="option_SV_LazyLoaderSpinner" version_id="1" version_string="0.0.1"><![CDATA[Lazy Loader Spinner]]></phrase>
     <phrase title="option_SV_LazyLoaderSpinner_explain" version_id="1" version_string="0.0.1"><![CDATA[Allows the lazy loader spinner to be replaced.]]></phrase>
     <phrase title="option_SV_LazyLoader_EnableDefault" version_id="100001" version_string="1.0.01"><![CDATA[Enable Outside threads/conversations]]></phrase>
@@ -60,7 +68,7 @@
   <route_prefixes/>
   <style_properties/>
   <templates>
-    <template title="sv_lazyimageloader_container_js_body" version_id="1" version_string="0.0.1"><![CDATA[<xen:if is="{xen:helper lazyloadstatus}" >
+    <template title="sv_lazyimageloader_container_js_body" version_id="100040" version_string="1.0.4"><![CDATA[<xen:if is="{xen:helper lazyloadstatus}" >
 <xen:require js="js/SV/LazyImageLoader/jquery.unveil.js" />
 $(document).ready(function() { 
   var images = $("img.bbCodeImage");
@@ -80,8 +88,7 @@ $(document).ready(function() {
     </modification>
     <modification template="page_container_js_body" modification_key="sv_lazyimageloader_page_container_js_body" description="Start Lazy Image Loader." execution_order="10" enabled="1" action="str_replace">
       <find><![CDATA[</script>]]></find>
-      <replace><![CDATA[
-<xen:include template="sv_lazyimageloader_container_js_body" />
+      <replace><![CDATA[<xen:include template="sv_lazyimageloader_container_js_body" />
 $0]]></replace>
     </modification>
   </public_template_modifications>

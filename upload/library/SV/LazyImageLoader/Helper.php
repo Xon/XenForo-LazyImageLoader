@@ -31,6 +31,10 @@ class SV_LazyImageLoader_Helper
     public static function SetLazyLoadEnabled($value)
     {
         SV_LazyImageLoader_Helper::$enable_lazyloading = $value;
+        if (SV_LazyImageLoader_Helper::$enable_lazyloading === false)
+        {
+            SV_LazyImageLoader_Helper::$enable_lazyloading = null;
+        }
         SV_LazyImageLoader_Helper::InstallTemplateHelper();
     }
 
