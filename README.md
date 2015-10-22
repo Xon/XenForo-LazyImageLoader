@@ -24,6 +24,8 @@ For "Forum Permissions" and "Conversation Permissions" sections.
 "Enable Outside threads/conversations" permits the lazy loading bbcode injection to run outside of those contexts. Inside those context it will still respect permissions.
 May still not work for all cases outside threads/conversations.
 
+"Force Lazy Loaded Spoiler" forces lazy loading for the contents of a spoiler tag even if permissions disable lazy loading.
+
 #Known issues:
 
 - Doesn't work with XenForo Media Gallery.
