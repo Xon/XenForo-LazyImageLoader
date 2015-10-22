@@ -18,4 +18,9 @@ class SV_LazyImageLoader_Listener
                 break;
         }
     }
+
+    public static function controller_post_dispatch(XenForo_Controller $controller, $controllerResponse, $controllerName, $action)
+    {
+        SV_LazyImageLoader_Helper::IsLazyLoadEnabled();
+    }
 }

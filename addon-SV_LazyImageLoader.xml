@@ -7,6 +7,7 @@
   <admin_template_modifications/>
   <code_events/>
   <code_event_listeners>
+    <listener event_id="controller_post_dispatch" execute_order="10" callback_class="SV_LazyImageLoader_Listener" callback_method="controller_post_dispatch" active="0" hint="" description="Enable everywhere"/>
     <listener event_id="load_class" execute_order="10" callback_class="SV_LazyImageLoader_Listener" callback_method="load_class" active="1" hint="XenForo_BbCode_Formatter_Base" description="XenForo_BbCode_Formatter_Base"/>
     <listener event_id="load_class" execute_order="10" callback_class="SV_LazyImageLoader_Listener" callback_method="load_class" active="1" hint="XenForo_ControllerPublic_Thread" description="XenForo_ControllerPublic_Thread"/>
     <listener event_id="load_class" execute_order="10" callback_class="SV_LazyImageLoader_Listener" callback_method="load_class" active="1" hint="XenForo_ControllerPublic_Conversation" description="XenForo_ControllerPublic_Conversation"/>
