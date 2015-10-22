@@ -12,7 +12,7 @@ class SV_LazyImageLoader_XenForo_BbCode_Formatter_Base  extends XFCP_SV_LazyImag
             $url = SV_LazyImageLoader_Helper::_getLoaderIcon();
             if ($url)
             {
-                self::$lazy_imageTemplate = '<img src="'.$url.'" data-src="%1$s" class="bbCodeImage%2$s" alt="[&#x200B;IMG]" data-url="%3$s" /><noscript><img src="%1$s" /></noscript>';
+                self::$lazy_imageTemplate = '<img src="'.$url.'" data-src="%1$s" class="bbCodeImage%2$s" alt="[&#x200B;IMG]" data-url="%3$s" style="display:none" /><noscript><img src="%1$s" /></noscript>';
             }
             else
             {

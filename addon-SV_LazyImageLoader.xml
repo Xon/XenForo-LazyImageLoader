@@ -63,7 +63,9 @@
     <template title="sv_lazyimageloader_container_js_body" version_id="1" version_string="0.0.1"><![CDATA[<xen:if is="{xen:helper lazyloadstatus}" >
 <xen:require js="js/SV/LazyImageLoader/jquery.unveil.js" />
 $(document).ready(function() { 
-  $("img").unveil({$xenOptions.SV_LazyLoader_PixelThreshold});
+  var images = $("img.bbCodeImage");
+  images.show();
+  images.unveil({$xenOptions.SV_LazyLoader_PixelThreshold});
 });
 </xen:if>]]></template>
   </templates>
