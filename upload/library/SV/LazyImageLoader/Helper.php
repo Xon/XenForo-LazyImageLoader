@@ -23,7 +23,10 @@ class SV_LazyImageLoader_Helper
 
     protected static function InstallTemplateHelper()
     {
-        XenForo_Template_Helper_Core::$helperCallbacks['lazyloadstatus'] = array('SV_LazyImageLoader_Helper', 'WasLazyLoadUsed');
+        if (!isset(XenForo_Template_Helper_Core::$helperCallbacks['lazyloadstatus']))
+        {
+            XenForo_Template_Helper_Core::$helperCallbacks['lazyloadstatus'] = array('SV_LazyImageLoader_Helper', 'WasLazyLoadUsed');
+        }
     }
 
     public static function WasLazyLoadUsed()

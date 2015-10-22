@@ -46,16 +46,19 @@ class SV_LazyImageLoader_XenForo_BbCode_Formatter_Base  extends XFCP_SV_LazyImag
         if (self::$forceSpoilerTags)
         {
             $temp = $this->_imageTemplate;
+            SV_LazyImageLoader_Helper::SetLazyLoadEnabled(true);
             if (self::$lazy_imageTemplate === null)
             {
-                SV_LazyImageLoader_Helper::SetLazyLoadEnabled(true);
                 self::$lazy_imageTemplate = $this->getLoaderTemplate();
-                SV_LazyImageLoader_Helper::SetLazyLoadEnabled(false);
                 self::$forceSpoilerTags = !empty(self::$lazy_imageTemplate);
             }
             if (self::$lazy_imageTemplate)
             {
                 $this->_imageTemplate = self::$lazy_imageTemplate;
+            }
+            else
+            {
+                SV_LazyImageLoader_Helper::SetLazyLoadEnabled(false);
             }
         }
 
@@ -64,6 +67,7 @@ class SV_LazyImageLoader_XenForo_BbCode_Formatter_Base  extends XFCP_SV_LazyImag
         if (self::$forceSpoilerTags)
         {
             $this->_imageTemplate = $temp;
+            SV_LazyImageLoader_Helper::SetLazyLoadEnabled(false);
         }
         return $response;
     }
