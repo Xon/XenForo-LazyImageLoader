@@ -7,7 +7,9 @@ A zero query method for per user-group lazy loading of the [img] and [attach] ta
 
 Uses a noscript tag around the original img tag.
 
-Interacts a little wonky with the Spoiler tag, see known issues for details.
+Supports:
+- Attachments, and images.
+- '[Tinhte] Image Attachment Optimization & CDN Support' add-on
 
 #Permissions
 
@@ -19,14 +21,14 @@ For "Forum Permissions" and "Conversation Permissions" sections.
 
 #Options
 
-"Enable Outside threads/Conversations" permits the lazy loading bbcode injection to run outside of those contexts. Inside those context it will still respect permissions.
+"Enable Outside threads/conversations" permits the lazy loading bbcode injection to run outside of those contexts. Inside those context it will still respect permissions.
+May still not work for all cases outside threads/conversations.
 
 #Known issues:
 
-- Interaction with the Spoiler tag means you need to move the viewport after opening the spoiler box before the lazy loader realises it should load those images.
 - Doesn't work with XenForo Media Gallery.
 - Doesn't work with Resource Manager.
-- May impact SEO due to the use of noscript to present the original image to users without scripting. Will display the spinner too.
+- May impact SEO due to the use of noscript to present the original image to users without scripting.
 - Loading spinner is ugly, and not per style.
 
 
