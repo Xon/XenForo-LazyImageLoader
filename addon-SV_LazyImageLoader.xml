@@ -74,6 +74,9 @@ $(document).ready(function() {
   var images = $("img.bbCodeImage");
   images.show();
   images.unveil({$xenOptions.SV_LazyLoader_PixelThreshold});
+  $(".bbCodeSpoilerButton").click(function(e) {
+    $(this).siblings(':first').find('img.bbCodeImage').unveil({$xenOptions.SV_LazyLoader_PixelThreshold});
+  })
 });
 </xen:if>]]></template>
   </templates>
