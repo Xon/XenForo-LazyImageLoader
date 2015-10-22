@@ -29,7 +29,7 @@ class SV_LazyImageLoader_XenForo_BbCode_Formatter_Base  extends XFCP_SV_LazyImag
 
     public function renderTagImage(array $tag, array $rendererStates)
     {
-        if (self::$lazy_imageTemplate === null && self::$lazyLoading)
+        if (self::$lazyLoading && self::$lazy_imageTemplate === null)
         {
             self::$lazy_imageTemplate = $this->getLoaderTemplate();
             self::$lazyLoading = !empty(self::$lazy_imageTemplate);
@@ -46,14 +46,14 @@ class SV_LazyImageLoader_XenForo_BbCode_Formatter_Base  extends XFCP_SV_LazyImag
         if (self::$forceSpoilerTags)
         {
             $temp = $this->_imageTemplate;
-            if (empty(self::$lazy_imageTemplate))
+            if (self::$lazy_imageTemplate === null)
             {
                 SV_LazyImageLoader_Helper::SetLazyLoadEnabled(true);
                 self::$lazy_imageTemplate = $this->getLoaderTemplate();
                 SV_LazyImageLoader_Helper::SetLazyLoadEnabled(false);
                 self::$forceSpoilerTags = !empty(self::$lazy_imageTemplate);
             }
-            if (self::$forceSpoilerTags)
+            if (self::$lazy_imageTemplate)
             {
                 $this->_imageTemplate = self::$lazy_imageTemplate;
             }
