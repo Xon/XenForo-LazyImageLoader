@@ -81,6 +81,18 @@ $(document).ready(function() {
 </xen:if>]]></template>
   </templates>
   <public_template_modifications>
+    <modification template="TinhTe_AIO_Attach" modification_key="sv_lazyimageloader_TinhTe_AIO_Attach_full" description="Lazy Image Loader - Full Attachments" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#src="({\$attachment_link})"#is]]></find>
+      <replace><![CDATA[<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$1' />]]></replace>
+    </modification>
+    <modification template="TinhTe_AIO_Attach" modification_key="sv_lazyimageloader_TinhTe_AIO_Attach_thumbnail" description="Lazy Image Loader - Thumbnails Attachments #1" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#src="({\$attachment\.thumbnailUrl})"#is]]></find>
+      <replace><![CDATA[<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$1' />]]></replace>
+    </modification>
+    <modification template="TinhTe_AIO_Attach" modification_key="sv_lazyimageloader_TinhTe_AIO_Attach_thumbnail2" description="Lazy Image Loader - Thumbnails Attachments #2" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#src="({\$attachment_thumbnail})"#is]]></find>
+      <replace><![CDATA[<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$1' />]]></replace>
+    </modification>
     <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach_full" description="Lazy Image Loader - Full Attachments" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#src="({xen:link full:attachments, \$attachment})"#is]]></find>
       <replace><![CDATA[<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$1' />]]></replace>
