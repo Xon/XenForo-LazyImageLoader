@@ -3,38 +3,15 @@
 class SV_LazyImageLoader_XenForo_BbCode_Formatter_Base  extends XFCP_SV_LazyImageLoader_XenForo_BbCode_Formatter_Base
 {
     static $lazy_imageTemplate = null;
-    static $lazy_tagImageTemplate = null;
     static $forceSpoilerTags = null;
+    static $lazyLoading = null;
 
     public function __construct()
     {
         parent::__construct();
-        if (self::$lazy_imageTemplate === null)
-        {
-            self::$lazy_imageTemplate = $this->getLoaderTemplate();
-        }
-        if (self::$lazy_imageTemplate)
-        {
-            $this->_imageTemplate = self::$lazy_imageTemplate;
-        }
 
-        if (self::$forceSpoilerTags === null)
-        {
-            self::$forceSpoilerTags = XenForo_Application::getOptions()->sv_forceLazySpoilerTag;
-            if (self::$forceSpoilerTags)
-            {
-                if (!self::$lazy_imageTemplate)
-                {
-                    SV_LazyImageLoader_Helper::SetLazyLoadEnabled(true);
-                    self::$lazy_tagImageTemplate = $this->getLoaderTemplate();
-                    SV_LazyImageLoader_Helper::SetLazyLoadEnabled(false);
-                }
-                else
-                {
-                    self::$forceSpoilerTags = false;
-                }
-            }
-        }
+        self::$lazyLoading = SV_LazyImageLoader_Helper::IsLazyLoadEnabled();
+        self::$forceSpoilerTags = !self::$lazyLoading && XenForo_Application::getOptions()->sv_forceLazySpoilerTag;
     }
 
     protected function getLoaderTemplate()
@@ -50,12 +27,36 @@ class SV_LazyImageLoader_XenForo_BbCode_Formatter_Base  extends XFCP_SV_LazyImag
         }
     }
 
+    public function renderTagImage(array $tag, array $rendererStates)
+    {
+        if (self::$lazy_imageTemplate === null && self::$lazyLoading)
+        {
+            self::$lazy_imageTemplate = $this->getLoaderTemplate();
+            self::$lazyLoading = !empty(self::$lazy_imageTemplate);
+            if (self::$lazyLoading)
+            {
+                $this->_imageTemplate = self::$lazy_imageTemplate;
+            }
+        }
+        return parent::renderTagImage($tag, $rendererStates);
+    }
+
     public function renderTagSpoiler(array $tag, array $rendererStates)
     {
         if (self::$forceSpoilerTags)
         {
             $temp = $this->_imageTemplate;
-            $this->_imageTemplate = self::$lazy_tagImageTemplate;
+            if (empty(self::$lazy_imageTemplate))
+            {
+                SV_LazyImageLoader_Helper::SetLazyLoadEnabled(true);
+                self::$lazy_imageTemplate = $this->getLoaderTemplate();
+                SV_LazyImageLoader_Helper::SetLazyLoadEnabled(false);
+                self::$forceSpoilerTags = !empty(self::$lazy_imageTemplate);
+            }
+            if (self::$forceSpoilerTags)
+            {
+                $this->_imageTemplate = self::$lazy_imageTemplate;
+            }
         }
 
         $response = parent::renderTagSpoiler($tag, $rendererStates);

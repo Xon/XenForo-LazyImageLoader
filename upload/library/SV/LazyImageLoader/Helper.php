@@ -19,22 +19,22 @@ class SV_LazyImageLoader_Helper
 
     static $lazy_loader_icon = null;
     static $enable_lazyloading = null;
+    static $WasLazyLoadUsed = false;
 
     protected static function InstallTemplateHelper()
     {
-        if (SV_LazyImageLoader_Helper::$enable_lazyloading)
-        {
-            XenForo_Template_Helper_Core::$helperCallbacks['lazyloadstatus'] = array('SV_LazyImageLoader_Helper', 'IsLazyLoadEnabled');
-        }
+        XenForo_Template_Helper_Core::$helperCallbacks['lazyloadstatus'] = array('SV_LazyImageLoader_Helper', 'WasLazyLoadUsed');
+    }
+
+    public static function WasLazyLoadUsed()
+    {
+        return self::$WasLazyLoadUsed;
     }
 
     public static function SetLazyLoadEnabled($value)
     {
         SV_LazyImageLoader_Helper::$enable_lazyloading = $value;
-        if (SV_LazyImageLoader_Helper::$enable_lazyloading === false)
-        {
-            SV_LazyImageLoader_Helper::$enable_lazyloading = null;
-        }
+        SV_LazyImageLoader_Helper::$lazy_loader_icon = null;
         SV_LazyImageLoader_Helper::InstallTemplateHelper();
     }
 
@@ -72,6 +72,7 @@ class SV_LazyImageLoader_Helper
                 }
 
                 SV_LazyImageLoader_Helper::$lazy_loader_icon = $spinnerURL;
+                SV_LazyImageLoader_Helper::$WasLazyLoadUsed = true;
             }
             else
             {
