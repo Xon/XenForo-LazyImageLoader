@@ -35,6 +35,18 @@
       <sub_options></sub_options>
       <relation group_id="SV_LazyLoader" display_order="100000"/>
     </option>
+    <option option_id="SV_LazyLoader_Spinner_CSS" edit_format="textbox" data_type="string" can_backup="1">
+      <default_value>lazyloading</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="SV_LazyLoader" display_order="100010"/>
+    </option>
+    <option option_id="SV_LazyLoader_Spinner_CSS2" edit_format="textbox" data_type="string" can_backup="1">
+      <default_value>lazyloaded</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="SV_LazyLoader" display_order="100020"/>
+    </option>
     <option option_id="sv_forceLazySpoilerTag" edit_format="onoff" data_type="boolean" can_backup="1">
       <default_value>1</default_value>
       <edit_format_params></edit_format_params>
@@ -62,6 +74,10 @@
     <phrase title="option_SV_LazyLoader_PixelThreshold" version_id="1" version_string="0.0.1"><![CDATA[Threshold]]></phrase>
     <phrase title="option_SV_LazyLoader_PixelThreshold_explain" version_id="1" version_string="0.0.1"><![CDATA[Specify how close in pixels the user needs to scroll to before an image is queued for loading.]]></phrase>
     <phrase title="option_SV_LazyLoader_Spinner" version_id="1" version_string="0.0.1"><![CDATA[Lazy Loader Spinner]]></phrase>
+    <phrase title="option_SV_LazyLoader_Spinner_CSS" version_id="100050" version_string="1.0.5"><![CDATA[Loading CSS]]></phrase>
+    <phrase title="option_SV_LazyLoader_Spinner_CSS2" version_id="100050" version_string="1.0.5"><![CDATA[Loaded CSS]]></phrase>
+    <phrase title="option_SV_LazyLoader_Spinner_CSS2_explain" version_id="100050" version_string="1.0.5"><![CDATA[The CSS to apply to images after being lazy loaded.]]></phrase>
+    <phrase title="option_SV_LazyLoader_Spinner_CSS_explain" version_id="100050" version_string="1.0.5"><![CDATA[The CSS to apply to images being lazy loaded.]]></phrase>
     <phrase title="option_SV_LazyLoader_Spinner_explain" version_id="1" version_string="0.0.1"><![CDATA[Allows the lazy loader spinner to be replaced.]]></phrase>
     <phrase title="permission_conversation_sv_lazyload_enable" version_id="1" version_string="0.0.1"><![CDATA[Enable Lazy Load Images]]></phrase>
     <phrase title="permission_forum_sv_lazyload_enable" version_id="1" version_string="0.0.1"><![CDATA[Enable Lazy Load Images]]></phrase>
@@ -74,7 +90,17 @@
 $(document).ready(function() { 
   var images = $(".bbCodeImage img, img.bbCodeImage");
   images.show();
-  images.unveil({$xenOptions.SV_LazyLoader_PixelThreshold});
+  images.unveil({$xenOptions.SV_LazyLoader_PixelThreshold}, function() {
+    $(this).load(function() {
+<xen:if is="{$xenOptions.SV_LazyLoader_Spinner_CSS}">
+      $(this).removeClass('{$xenOptions.SV_LazyLoader_Spinner_CSS}');
+      $(this).parent().removeClass('{$xenOptions.SV_LazyLoader_Spinner_CSS}');
+</xen:if>
+<xen:if is="{$xenOptions.SV_LazyLoader_Spinner_CSS2}">
+      $(this).addClass('{$xenOptions.SV_LazyLoader_Spinner_CSS2}');
+</xen:if>
+    });
+  });
   $(".bbCodeSpoilerButton").click(function(e) {
     $(this).siblings(':first').find('img.bbCodeImage').unveil({$xenOptions.SV_LazyLoader_PixelThreshold});
   })
@@ -82,34 +108,34 @@ $(document).ready(function() {
 </xen:if>]]></template>
   </templates>
   <public_template_modifications>
-    <modification template="TinhTe_AIO_Attach" modification_key="sv_lazyimageloader_TinhTe_AIO_Attach_full" description="Lazy Image Loader - Full Attachments" execution_order="10" enabled="1" action="preg_replace">
-      <find><![CDATA[#src="({\$attachment_link})"#is]]></find>
-      <replace><![CDATA[<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$1' />]]></replace>
+    <modification template="TinhTe_AIO_Attach" modification_key="sv_lazyimageloader_TinhTe_AIO_Attach_css" description="Lazy Image Loader - CSS" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<img.*?class="[^"]*)(")#is]]></find>
+      <replace><![CDATA[$1 <xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerCss' />$2]]></replace>
     </modification>
-    <modification template="TinhTe_AIO_Attach" modification_key="sv_lazyimageloader_TinhTe_AIO_Attach_thumbnail" description="Lazy Image Loader - Thumbnails Attachments #1" execution_order="10" enabled="1" action="preg_replace">
-      <find><![CDATA[#src="({\$attachment\.thumbnailUrl})"#is]]></find>
-      <replace><![CDATA[<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$1' />]]></replace>
+    <modification template="TinhTe_AIO_Attach" modification_key="sv_lazyimageloader_TinhTe_AIO_Attach_url" description="Lazy Image Loader - URL" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<img\s+src=")([^"]*)(")#is]]></find>
+      <replace><![CDATA[$1<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$2' />$3]]></replace>
     </modification>
-    <modification template="TinhTe_AIO_Attach" modification_key="sv_lazyimageloader_TinhTe_AIO_Attach_thumbnail2" description="Lazy Image Loader - Thumbnails Attachments #2" execution_order="10" enabled="1" action="preg_replace">
-      <find><![CDATA[#src="({\$attachment_thumbnail})"#is]]></find>
-      <replace><![CDATA[<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$1' />]]></replace>
+    <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach_css" description="Lazy Image Loader - CSS" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<img.*?class="[^"]*)(")#is]]></find>
+      <replace><![CDATA[$1 <xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerCss' />$2]]></replace>
     </modification>
-    <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach_full" description="Lazy Image Loader - Full Attachments" execution_order="10" enabled="1" action="preg_replace">
-      <find><![CDATA[#src="({xen:link full:attachments, \$attachment})"#is]]></find>
-      <replace><![CDATA[<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$1' />]]></replace>
-    </modification>
-    <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach_thumbnail" description="Lazy Image Loader - Thumbnails Attachments" execution_order="10" enabled="1" action="preg_replace">
-      <find><![CDATA[#src="({\$attachment\.thumbnailUrl})"#is]]></find>
-      <replace><![CDATA[<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$1' />]]></replace>
-    </modification>
-    <modification template="forum_list_recent_attachments" modification_key="sv_lazyimageloader_forum_list_recent_attachments" description="Recent Attachments support" execution_order="1" enabled="1" action="preg_replace">
-      <find><![CDATA[#src="({\$attachment\.thumbnailUrl})"#is]]></find>
-      <replace><![CDATA[<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$1' />]]></replace>
+    <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach_url" description="Lazy Image Loader - URL" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<img\s+src=")([^"]*)(")#is]]></find>
+      <replace><![CDATA[$1<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$2' />$3]]></replace>
     </modification>
     <modification template="page_container_js_body" modification_key="sv_lazyimageloader_page_container_js_body" description="Start Lazy Image Loader." execution_order="10" enabled="1" action="str_replace">
       <find><![CDATA[</script>]]></find>
       <replace><![CDATA[<xen:include template="sv_lazyimageloader_container_js_body" />
 $0]]></replace>
+    </modification>
+    <modification template="forum_list_recent_attachments" modification_key="sv_lazyimageloader_recent_attachments_css" description="Recent Attachments support - CSS" execution_order="1" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<img.*?class="[^"]*)(")#is]]></find>
+      <replace><![CDATA[$1 <xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerCss' />$2]]></replace>
+    </modification>
+    <modification template="forum_list_recent_attachments" modification_key="sv_lazyimageloader_recent_attachments_url" description="Recent Attachments support- URL" execution_order="1" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<img\s+src=")([^"]*)(")#is]]></find>
+      <replace><![CDATA[$1<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$2' />$3]]></replace>
     </modification>
   </public_template_modifications>
   <bb_code_media_sites/>

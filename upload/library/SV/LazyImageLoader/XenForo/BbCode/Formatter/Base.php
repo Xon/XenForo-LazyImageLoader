@@ -17,9 +17,10 @@ class SV_LazyImageLoader_XenForo_BbCode_Formatter_Base  extends XFCP_SV_LazyImag
     protected function getLoaderTemplate()
     {
         $url = SV_LazyImageLoader_Helper::_getLoaderIcon();
-        if ($url)
+        $css = SV_LazyImageLoader_Helper::_getLoaderCss();
+        if ($url || $css)
         {
-            return '<img src="'.$url.'" data-src="%1$s" class="bbCodeImage%2$s" alt="[&#x200B;IMG]" data-url="%3$s" style="display:none" /><noscript><img src="%1$s" /></noscript>';
+            return '<img src="'.$url.'" data-src="%1$s" class="bbCodeImage%2$s '.$css.'" alt="[&#x200B;IMG]" data-url="%3$s" style="display:none" /><noscript><img src="%1$s" /></noscript>';
         }
         else
         {
