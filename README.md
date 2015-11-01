@@ -7,6 +7,7 @@ A zero query method for per user-group lazy loading of the [img] and [attach] ta
 
 Supports:
 - Attachments, and images.
+- 'Recent / Random Attachments On Forum Homepage' add-on 
 - '[Tinhte] Image Attachment Optimization & CDN Support' add-on
 
 #Permissions
