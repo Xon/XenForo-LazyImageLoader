@@ -6,7 +6,20 @@ class SV_LazyImageLoader_Helper
     {
         if (SV_LazyImageLoader_Helper::$enable_lazyloading)
         {
-            return 'lazyload';
+            $css = 'lazyload';
+            if (!empty($params['attachment']))
+            {
+                $attachment = $params['attachment'];
+                if (!empty($params['full']) && !empty($attachment['width']) && !empty($attachment['height']))
+                {
+                    $css .= '" width="'.$attachment['width'].'" height="'.$attachment['height'];
+                }
+                else if (!empty($attachment['thumbnail_width']) && !empty($attachment['thumbnail_height']))
+                {
+                    $css .='" width="'.$attachment['thumbnail_width'].'" height="'.$attachment['thumbnail_height'];
+                }
+            }
+            return $css;
         }
 
         return '';
