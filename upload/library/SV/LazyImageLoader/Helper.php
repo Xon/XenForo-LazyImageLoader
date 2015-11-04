@@ -19,17 +19,17 @@ class SV_LazyImageLoader_Helper
                     $css .='" width="'.$attachment['thumbnail_width'].'" height="'.$attachment['thumbnail_height'];
                 }
             }
-            return $css;
+            return $css . @$params['extra'] . '<noscript>' . @$params['noscript'] . '</noscript>';
         }
 
-        return '';
+        return @$params['extra'];
     }
 
     public static function getLazySpinnerUrl($content, $params, XenForo_Template_Abstract $template)
     {
         if (SV_LazyImageLoader_Helper::$enable_lazyloading)
         {
-            return  $url . '" data-src="' . $params;
+            return  '" data-src="' . $params;
         }
 
         return $params;

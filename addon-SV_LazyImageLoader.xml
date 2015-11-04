@@ -52,21 +52,13 @@
   <style_properties/>
   <templates/>
   <public_template_modifications>
-    <modification template="TinhTe_AIO_Attach" modification_key="sv_lazyimageloader_TinhTe_AIO_Attach_css" description="Lazy Image Loader - CSS" execution_order="10" enabled="1" action="preg_replace">
-      <find><![CDATA[#(<img.*?class="[^"]*)(")#is]]></find>
-      <replace><![CDATA[$1 <xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerCss' params='{xen:array 'full={$full}', 'attachment={$attachment}'}' />$2]]></replace>
+    <modification template="TinhTe_AIO_Attach" modification_key="sv_lazyimageloader_TinhTe_AIO_Attach" description="Lazy Image Loader" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<img\s+src=")([^"]*)(".*?class="[^"]*)("\s*?/>)#is]]></find>
+      <replace><![CDATA[$1<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$2' />$3 <xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerCss' params='{xen:array 'full={$full}', 'attachment={$attachment}', 'extra=$4', 'noscript={$1$2$3$4}'}' />]]></replace>
     </modification>
-    <modification template="TinhTe_AIO_Attach" modification_key="sv_lazyimageloader_TinhTe_AIO_Attach_url" description="Lazy Image Loader - URL" execution_order="10" enabled="1" action="preg_replace">
-      <find><![CDATA[#(<img\s+src=")([^"]*)(")#is]]></find>
-      <replace><![CDATA[$1<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$2' />$3]]></replace>
-    </modification>
-    <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach_css" description="Lazy Image Loader - CSS" execution_order="10" enabled="1" action="preg_replace">
-      <find><![CDATA[#(<img.*?class="[^"]*)(")#is]]></find>
-      <replace><![CDATA[$1 <xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerCss' params='{xen:array 'full={$full}', 'attachment={$attachment}'}' />$2]]></replace>
-    </modification>
-    <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach_url" description="Lazy Image Loader - URL" execution_order="10" enabled="1" action="preg_replace">
-      <find><![CDATA[#(<img\s+src=")([^"]*)(")#is]]></find>
-      <replace><![CDATA[$1<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$2' />$3]]></replace>
+    <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach" description="Lazy Image Loader" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<img\s+src=")([^"]*)(".*?class="[^"]*)("\s*?/>)#is]]></find>
+      <replace><![CDATA[$1<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$2' />$3 <xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerCss' params='{xen:array 'full={$full}', 'attachment={$attachment}', 'extra=$4', 'noscript={$1$2$3$4}'}' />]]></replace>
     </modification>
     <modification template="bb_code.css" modification_key="sv_lazyimageloader_bb_codecss_1" description="Add NoJs support" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#$#]]></find>
@@ -81,13 +73,9 @@
       <replace><![CDATA[$0
 <script src="js/SV/LazyImageLoader/lazysizes.min.js" async=""></script>]]></replace>
     </modification>
-    <modification template="forum_list_recent_attachments" modification_key="sv_lazyimageloader_recent_attachments_css" description="Recent Attachments support - CSS" execution_order="1" enabled="1" action="preg_replace">
-      <find><![CDATA[#(<img.*?class="[^"]*)(")#is]]></find>
-      <replace><![CDATA[$1 <xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerCss' params='{xen:array 'full={$full}', 'attachment={$attachment}'}' />$2]]></replace>
-    </modification>
-    <modification template="forum_list_recent_attachments" modification_key="sv_lazyimageloader_recent_attachments_url" description="Recent Attachments support- URL" execution_order="1" enabled="1" action="preg_replace">
-      <find><![CDATA[#(<img\s+src=")([^"]*)(")#is]]></find>
-      <replace><![CDATA[$1<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$2' />$3]]></replace>
+    <modification template="forum_list_recent_attachments" modification_key="sv_lazyimageloader_recent_attachments" description="Lazy Image Loader" execution_order="1" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<img\s+src=")([^"]*)(".*?class="[^"]*)("\s*?/>)#is]]></find>
+      <replace><![CDATA[$1<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$2' />$3 <xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerCss' params='{xen:array 'full={$full}', 'attachment={$attachment}', 'extra=$4', 'noscript={$1$2$3$4}'}' />]]></replace>
     </modification>
   </public_template_modifications>
   <bb_code_media_sites/>
