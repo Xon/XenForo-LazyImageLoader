@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="SV_LazyImageLoader" title="Lazy Image Loader" version_string="1.1.0 Alpha 2" version_id="101001" url="https://xenforo.com/community/resources/lazy-load-img.3979/" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+<addon addon_id="SV_LazyImageLoader" title="Lazy Image Loader" version_string="1.1.0" version_id="101002" url="https://xenforo.com/community/resources/lazy-load-img.3979/" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -67,6 +67,14 @@
     <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach_url" description="Lazy Image Loader - URL" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#(<img\s+src=")([^"]*)(")#is]]></find>
       <replace><![CDATA[$1<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$2' />$3]]></replace>
+    </modification>
+    <modification template="bb_code.css" modification_key="sv_lazyimageloader_bb_codecss_1" description="Add NoJs support" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#$#]]></find>
+      <replace><![CDATA[$0
+.NoJs .lazyload
+{
+	display:none;
+}]]></replace>
     </modification>
     <modification template="page_container_js_head" modification_key="sv_lazyimageloader_page_container_js_head" description="Load Lazy Image Loader" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#$#]]></find>
