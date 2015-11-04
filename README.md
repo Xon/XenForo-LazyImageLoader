@@ -16,6 +16,35 @@ Adds the permission:
 - Enable Lazy Load Images
 For "Forum Permissions" and "Conversation Permissions" sections.
 
+#Unveil effects:
+
+##Fade in
+```css
+/* fade image in after load */
+.lazyload,
+.lazyloading {
+	opacity: 0;
+}
+.lazyloaded {
+	opacity: 1;
+	transition: opacity 300ms;
+}
+```
+
+##Spinner
+```css
+/* fade image in while loading and show a spinner as background image (good for progressive images) */
+
+.lazyload {
+	opacity: 0;
+}
+
+.lazyloading {
+	opacity: 1;
+	transition: opacity 300ms;
+	background: #f7f7f7 url(loader.gif) no-repeat center;
+}
+```
 
 #Options
 
