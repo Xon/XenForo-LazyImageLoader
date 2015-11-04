@@ -57,7 +57,6 @@ May still not work for all cases outside threads/conversations.
 
 - Doesn't work with XenForo Media Gallery.
 - Doesn't work with Resource Manager.
-- Users without javascipt will not see any images.
 
 
 Lazysizes  is MIT Licensed, as of 2015-11-01. 
