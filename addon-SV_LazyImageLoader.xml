@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="SV_LazyImageLoader" title="Lazy Image Loader" version_string="1.1.1" version_id="1010100" url="https://xenforo.com/community/resources/lazy-load-img.3979/" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+<addon addon_id="SV_LazyImageLoader" title="Lazy Image Loader" version_string="1.1.2" version_id="1010200" url="https://xenforo.com/community/resources/lazy-load-img.3979/" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -54,11 +54,11 @@
   <public_template_modifications>
     <modification template="TinhTe_AIO_Attach" modification_key="sv_lazyimageloader_TinhTe_AIO_Attach" description="Lazy Image Loader" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#(<img\s+src=")([^"]*)(".*?class="[^"]*)("\s*?/>)#is]]></find>
-      <replace><![CDATA[$1<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$2' />$3 <xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerCss' params='{xen:array 'full={$full}', 'attachment={$attachment}', 'extra=$4', 'noscript={$1$2$3$4}'}' />]]></replace>
+      <replace><![CDATA[<xen:callback class='SV_LazyImageLoader_Helper' method='getLazyLoadedImage' params='{xen:array 'full={$full}', 'attachment={$attachment}', '1=$1', '2=$2', '3=$3', '4=$4'}' />]]></replace>
     </modification>
     <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach" description="Lazy Image Loader" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#(<img\s+src=")([^"]*)(".*?class="[^"]*)("\s*?/>)#is]]></find>
-      <replace><![CDATA[$1<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$2' />$3 <xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerCss' params='{xen:array 'full={$full}', 'attachment={$attachment}', 'extra=$4', 'noscript={$1$2$3$4}'}' />]]></replace>
+      <replace><![CDATA[<xen:callback class='SV_LazyImageLoader_Helper' method='getLazyLoadedImage' params='{xen:array 'full={$full}', 'attachment={$attachment}', '1=$1', '2=$2', '3=$3', '4=$4'}' />]]></replace>
     </modification>
     <modification template="bb_code.css" modification_key="sv_lazyimageloader_bb_codecss_1" description="Add NoJs support" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#$#]]></find>
@@ -66,12 +66,32 @@
 .NoJs .lazyload
 {
 	display:none;
+}
+
+.ratio-container {
+    position: relative;
+    height: 0;
+    display: block;
+    width: 100%;
+}
+
+.ratio-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
 }]]></replace>
     </modification>
     <modification template="page_container_js_head" modification_key="sv_lazyimageloader_page_container_js_head" description="Load Lazy Image Loader" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#$#]]></find>
       <replace><![CDATA[$0
-<script src="js/SV/LazyImageLoader/lazysizes.min.js" async=""></script>]]></replace>
+<xen:if is="{$debugMode}">
+<script src="js/SV/LazyImageLoader/lazysizes.js" async=""></script>
+<xen:else/>
+<script src="js/SV/LazyImageLoader/lazysizes.min.js" async=""></script>
+</xen:if>]]></replace>
     </modification>
     <modification template="forum_list_recent_attachments" modification_key="sv_lazyimageloader_recent_attachments" description="Lazy Image Loader" execution_order="1" enabled="1" action="preg_replace">
       <find><![CDATA[#(<img\s+src=")([^"]*)(".*?class="[^"]*)("\s*?/>)#is]]></find>
