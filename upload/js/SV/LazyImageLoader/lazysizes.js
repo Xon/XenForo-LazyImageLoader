@@ -19,6 +19,8 @@
 
 	var _addEventListener = 'addEventListener';
 
+	var _getAttribute = 'getAttribute';
+
 	var addEventListener = window[_addEventListener];
 
 	var setTimeout = window.setTimeout;
@@ -37,19 +39,19 @@
 		if(!regClassCache[cls]){
 			regClassCache[cls] = new RegExp('(\\s|^)'+cls+'(\\s|$)');
 		}
-		return regClassCache[cls].test(ele.className) && regClassCache[cls];
+		return regClassCache[cls].test(ele[_getAttribute]('class') || '') && regClassCache[cls];
 	};
 
 	var addClass = function(ele, cls) {
 		if (!hasClass(ele, cls)){
-			ele.className = ele.className.trim() + ' ' + cls;
+			ele.setAttribute('class', (ele[_getAttribute]('class') || '').trim() + ' ' + cls);
 		}
 	};
 
 	var removeClass = function(ele, cls) {
 		var reg;
 		if ((reg = hasClass(ele,cls))) {
-			ele.className = ele.className.replace(reg, ' ');
+			ele.setAttribute('class', (ele[_getAttribute]('class') || '').replace(reg, ' '));
 		}
 	};
 
@@ -136,22 +138,24 @@
 		var gDelay = 125;
 		var dTimeout = 999;
 		var timeout = dTimeout;
+		var fastCallThreshold = 0;
 		var run = function(){
 			running = false;
 			lastTime = Date.now();
 			fn();
 		};
 		var afterAF = function(){
-			setImmediate(run);
+			setTimeout(run);
 		};
 		var getAF = function(){
 			rAF(afterAF);
 		};
 
 		if(requestIdleCallback){
-			gDelay = 99;
+			gDelay = 66;
+			fastCallThreshold = 22;
 			getAF = function(){
-				requestIdleCallback(run, timeout);
+				requestIdleCallback(run, {timeout: timeout});
 				if(timeout !== dTimeout){
 					timeout = dTimeout;
 				}
@@ -159,7 +163,7 @@
 		}
 
 		return function(isPriority){
-
+			var delay;
 			if((isPriority = isPriority === true)){
 				timeout = 40;
 			}
@@ -167,11 +171,10 @@
 			if(running){
 				return;
 			}
-			var delay = gDelay - (Date.now() - lastTime);
 
 			running =  true;
 
-			if(isPriority || delay < 0){
+			if(isPriority || (delay = gDelay - (Date.now() - lastTime)) < fastCallThreshold){
 				getAF();
 			} else {
 				setTimeout(getAF, delay);
@@ -185,7 +188,7 @@
 
 		var eLvW, elvH, eLtop, eLleft, eLright, eLbottom;
 
-		var defaultExpand, preloadExpand;
+		var defaultExpand, preloadExpand, hFac;
 
 		var regImg = /^img$/i;
 		var regIframe = /^iframe$/i;
@@ -212,14 +215,14 @@
 		var isNestedVisible = function(elem, elemExpand){
 			var outerRect;
 			var parent = elem;
-			var visible = getCSS(elem, 'visibility') != 'hidden';
+			var visible = getCSS(document.body, 'visibility') == 'hidden' || getCSS(elem, 'visibility') != 'hidden';
 
 			eLtop -= elemExpand;
 			eLbottom += elemExpand;
 			eLleft -= elemExpand;
 			eLright += elemExpand;
 
-			while(visible && (parent = parent.offsetParent)){
+			while(visible && (parent = parent.offsetParent) && parent != document.body && parent != docElem){
 				visible = ((getCSS(parent, 'opacity') || 1) > 0);
 
 				if(visible && getCSS(parent, 'overflow') != 'visible'){
@@ -244,6 +247,15 @@
 
 				lowRuns++;
 
+				if(preloadExpand == null){
+					if(!('expand' in lazySizesConfig)){
+						lazySizesConfig.expand = docElem.clientHeight > 600 ? docElem.clientWidth > 860 ? 500 : 410 : 359;
+					}
+
+					defaultExpand = lazySizesConfig.expand;
+					preloadExpand = defaultExpand * lazySizesConfig.expFactor;
+				}
+
 				if(currentExpand < preloadExpand && isLoading < 1 && lowRuns > 3 && loadMode > 2){
 					currentExpand = preloadExpand;
 					lowRuns = 0;
@@ -259,12 +271,12 @@
 
 					if(!supportScroll){unveilElement(lazyloadElems[i]);continue;}
 
-					if(!(elemExpandVal = lazyloadElems[i].getAttribute('data-expand')) || !(elemExpand = elemExpandVal * 1)){
+					if(!(elemExpandVal = lazyloadElems[i][_getAttribute]('data-expand')) || !(elemExpand = elemExpandVal * 1)){
 						elemExpand = currentExpand;
 					}
 
 					if(beforeExpandVal !== elemExpand){
-						eLvW = innerWidth + elemExpand;
+						eLvW = innerWidth + (elemExpand * hFac);
 						elvH = innerHeight + elemExpand;
 						elemNegativeExpand = elemExpand * -1;
 						beforeExpandVal = elemExpand;
@@ -274,18 +286,17 @@
 
 					if ((eLbottom = rect.bottom) >= elemNegativeExpand &&
 						(eLtop = rect.top) <= elvH &&
-						(eLright = rect.right) >= elemNegativeExpand &&
+						(eLright = rect.right) >= elemNegativeExpand * hFac &&
 						(eLleft = rect.left) <= eLvW &&
 						(eLbottom || eLright || eLleft || eLtop) &&
 						((isCompleted && isLoading < 3 && !elemExpandVal && (loadMode < 3 || lowRuns < 4)) || isNestedVisible(lazyloadElems[i], elemExpand))){
 						unveilElement(lazyloadElems[i]);
 						loadedSomething = true;
 						if(isLoading > 9){break;}
-						if(isLoading > 6){currentExpand = shrinkExpand;}
 					} else if(!loadedSomething && isCompleted && !autoLoadElem &&
 						isLoading < 4 && lowRuns < 4 && loadMode > 2 &&
 						(preloadElems[0] || lazySizesConfig.preloadAfterLoad) &&
-						(preloadElems[0] || (!elemExpandVal && ((eLbottom || eLright || eLleft || eLtop) || lazyloadElems[i].getAttribute(lazySizesConfig.sizesAttr) != 'auto')))){
+						(preloadElems[0] || (!elemExpandVal && ((eLbottom || eLright || eLleft || eLtop) || lazyloadElems[i][_getAttribute](lazySizesConfig.sizesAttr) != 'auto')))){
 						autoLoadElem = preloadElems[0] || lazyloadElems[i];
 					}
 				}
@@ -315,9 +326,9 @@
 		var handleSources = function(source){
 			var customMedia, parent;
 
-			var sourceSrcset = source.getAttribute(lazySizesConfig.srcsetAttr);
+			var sourceSrcset = source[_getAttribute](lazySizesConfig.srcsetAttr);
 
-			if( (customMedia = lazySizesConfig.customMedia[source.getAttribute('data-media') || source.getAttribute('media')]) ){
+			if( (customMedia = lazySizesConfig.customMedia[source[_getAttribute]('data-media') || source[_getAttribute]('media')]) ){
 				source.setAttribute('media', customMedia);
 			}
 
@@ -325,6 +336,7 @@
 				source.setAttribute('srcset', sourceSrcset);
 			}
 
+			//https://bugzilla.mozilla.org/show_bug.cgi?id=1170572
 			if(customMedia){
 				parent = source.parentNode;
 				parent.insertBefore(source.cloneNode(), source);
@@ -356,7 +368,7 @@
 			var isImg = regImg.test(elem.nodeName);
 
 			//allow using sizes="auto", but don't use. it's invalid. Use data-sizes="auto" or a valid value for sizes instead (i.e.: sizes="80vw")
-			var sizes = isImg && (elem.getAttribute(lazySizesConfig.sizesAttr) || elem.getAttribute('sizes'));
+			var sizes = isImg && (elem[_getAttribute](lazySizesConfig.sizesAttr) || elem[_getAttribute]('sizes'));
 			var isAuto = sizes == 'auto';
 
 			if( (isAuto || !isCompleted) && isImg && (elem.src || elem.srcset) && !elem.complete && !hasClass(elem, lazySizesConfig.errorClass)){return;}
@@ -373,21 +385,19 @@
 					delete elem._lazyRace;
 				}
 
-				removeClass(elem, lazySizesConfig.lazyClass);
-
 				if(!(event = triggerEvent(elem, 'lazybeforeunveil')).defaultPrevented){
 
 					if(sizes){
 						if(isAuto){
-							addClass(elem, lazySizesConfig.autosizesClass);
 							autoSizer.updateElem(elem, true, width);
+							addClass(elem, lazySizesConfig.autosizesClass);
 						} else {
 							elem.setAttribute('sizes', sizes);
 						}
 					}
 
-					srcset = elem.getAttribute(lazySizesConfig.srcsetAttr);
-					src = elem.getAttribute(lazySizesConfig.srcAttr);
+					srcset = elem[_getAttribute](lazySizesConfig.srcsetAttr);
+					src = elem[_getAttribute](lazySizesConfig.srcAttr);
 
 					if(isImg) {
 						parent = elem.parentNode;
@@ -426,6 +436,8 @@
 					}
 				}
 
+				removeClass(elem, lazySizesConfig.lazyClass);
+
 				if( !firesLoad || elem.complete ){
 					if(firesLoad){
 						resetPreloading(event);
@@ -454,7 +466,11 @@
 			lazySizesConfig.loadMode = 3;
 
 			if(!isLoading){
-				throttledCheckElements();
+				if(lowRuns){
+					throttledCheckElements();
+				} else {
+					setTimeout(checkElements);
+				}
 			}
 
 			addEventListener('scroll', function(){
@@ -507,9 +523,7 @@
 
 				lazyloadElems = document.getElementsByClassName(lazySizesConfig.lazyClass);
 				preloadElems = document.getElementsByClassName(lazySizesConfig.lazyClass + ' ' + lazySizesConfig.preloadClass);
-
-				defaultExpand = lazySizesConfig.expand;
-				preloadExpand = defaultExpand * lazySizesConfig.expFactor;
+				hFac = lazySizesConfig.hFac;
 
 				addEventListener('scroll', throttledCheckElements, true);
 
@@ -631,7 +645,7 @@
 			customMedia: {},
 			init: true,
 			expFactor: 1.7,
-			expand: docElem.clientHeight > 630 ? docElem.clientWidth > 890 ? 500 : 410 : 359,
+			hFac: 0.8,
 			loadMode: 2
 		};
 
