@@ -68,17 +68,13 @@
 	display:none;
 }]]></replace>
     </modification>
-    <modification template="xengallery_album_thumb_item" modification_key="sv_lazyimageloader_gallery_albums" description="" execution_order="10" enabled="1" action="str_replace">
-      <find><![CDATA[<img src="{$album.mediaCache.placeholder}" class="thumbImage AlbumThumbs show" data-images="{xen:helper implode, $album.mediaCache.thumbnails, ','}" alt="{$album.album_title}" />]]></find>
-      <replace><![CDATA[<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="{$album.mediaCache.placeholder}" class="lazyload thumbImage AlbumThumbs show" data-images="{xen:helper implode, $album.mediaCache.thumbnails, ','}" alt="{$album.album_title}" />]]></replace>
-    </modification>
-    <modification template="xengallery_bb_code_tag_gallery_media" modification_key="sv_lazyimageloader_gallery_posts_and_conversations" description="" execution_order="10" enabled="1" action="str_replace">
+    <modification template="xengallery_bb_code_tag_gallery_media" modification_key="sv_lazyimageloader_gallery_posts_and_conversations" description="Lazy Image Loader" execution_order="10" enabled="1" action="str_replace">
       <find><![CDATA[<img src="{xen:link xengallery/full, $media}" class="galleryImage" />]]></find>
       <replace><![CDATA[<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="{xen:link xengallery/full, $media}" class="lazyload galleryImage" />]]></replace>
     </modification>
     <modification template="xengallery_media_thumb_item" modification_key="sv_lazyimageloader_gallery_thumbnails" description="Lazy Image Loader" execution_order="10" enabled="1" action="str_replace">
       <find><![CDATA[<img src="{$item.thumbnailUrl}?{$item.last_edit_date}" class="thumbImage" alt="{$item.media_title}" />]]></find>
-      <replace><![CDATA[<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="{$item.thumbnailUrl}?{$item.last_edit_date}" class="lazyload thumbImage" alt="{$item.media_title}" />]]></replace>
+      <replace><![CDATA[<img src="" data-src="{$item.thumbnailUrl}?{$item.last_edit_date}" class="lazyload thumbImage" alt="{$item.media_title}" />]]></replace>
     </modification>
     <modification template="page_container_js_head" modification_key="sv_lazyimageloader_page_container_js_head" description="Load Lazy Image Loader" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#$#]]></find>
