@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="SV_LazyImageLoader" title="Lazy Image Loader" version_string="1.2.1" version_id="1020100" url="https://xenforo.com/community/resources/lazy-load-img.3979/" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+<addon addon_id="SV_LazyImageLoader" title="Lazy Image Loader" version_string="1.2.2" version_id="1020200" url="https://xenforo.com/community/resources/lazy-load-img.3979/" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -79,7 +79,7 @@
     <modification template="page_container_js_head" modification_key="sv_lazyimageloader_page_container_js_head" description="Load Lazy Image Loader" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#$#]]></find>
       <replace><![CDATA[$0
-<script src="js/SV/LazyImageLoader/lazysizes.min.js" async=""></script>]]></replace>
+<script src="{$javaScriptSource}/js/SV/LazyImageLoader/lazysizes.min.js" async=""></script>]]></replace>
     </modification>
     <modification template="forum_list_recent_attachments" modification_key="sv_lazyimageloader_recent_attachments" description="Lazy Image Loader" execution_order="1" enabled="1" action="preg_replace">
       <find><![CDATA[#(<img\s+src=")([^"]*)(".*?class="[^"]*)("\s*?/>)#is]]></find>
