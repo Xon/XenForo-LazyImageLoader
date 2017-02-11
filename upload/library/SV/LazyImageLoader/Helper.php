@@ -12,11 +12,11 @@ class SV_LazyImageLoader_Helper
                 $attachment = $params['attachment'];
                 if (!empty($params['full']) && !empty($attachment['width']) && !empty($attachment['height']))
                 {
-                    $css .= '" style="max-width:'.$attachment['width'].'px;max-height:'.$attachment['height'] .'px ';
+                    $css .= '" style="max-height:'.$attachment['height'] .'px ';
                 }
                 else if (!empty($attachment['thumbnail_width']) && !empty($attachment['thumbnail_height']))
                 {
-                    $css .='" style="max-width:'.$attachment['thumbnail_width'].'px;max-height:'.$attachment['thumbnail_height'] .'px ';
+                    $css .='" style="max-height:'.$attachment['thumbnail_height'] .'px ';
                 }
             }
             return $css . @$params['extra'] . '<noscript>' . @$params['noscript'] . '</noscript>';
