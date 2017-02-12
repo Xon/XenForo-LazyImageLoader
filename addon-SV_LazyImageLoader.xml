@@ -79,7 +79,7 @@
     <modification template="page_container_js_head" modification_key="sv_lazyimageloader_page_container_js_head" description="Load Lazy Image Loader" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#$#]]></find>
       <replace><![CDATA[$0
-<script src="{$javaScriptSource}/js/SV/LazyImageLoader/lazysizes.min.js" async=""></script>]]></replace>
+<script src="{$javaScriptSource}/SV/LazyImageLoader/lazysizes.min.js" async=""></script>]]></replace>
     </modification>
     <modification template="forum_list_recent_attachments" modification_key="sv_lazyimageloader_recent_attachments" description="Lazy Image Loader" execution_order="1" enabled="1" action="preg_replace">
       <find><![CDATA[#(<img\s+src=")([^"]*)(".*?class="[^"]*)("\s*?/>)#is]]></find>
