@@ -27,12 +27,21 @@ class SV_LazyImageLoader_Helper
 
     public static function getLazySpinnerUrl($content, $params, XenForo_Template_Abstract $template)
     {
+        $originalUrl = is_array($params) ? $params['url'] : $params;
         if (SV_LazyImageLoader_Helper::$enable_lazyloading)
         {
-            return  '" data-src="' . $params;
+            $placeholder = '';
+            if (is_array($params))
+            {
+                $width = $params['width'];
+                $height = $params['height'];
+                $placeholder = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox%3D'0 0 {$width} {$height}'%2F%3E";
+            }
+            // Insert an SVG with proper aspect ratio to make responsive design work smoothly
+            return $placeholder . '" data-src="' . $originalUrl;
         }
 
-        return $params;
+        return $originalUrl;
     }
 
     static $enable_lazyloading = null;

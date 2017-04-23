@@ -58,7 +58,7 @@
     </modification>
     <modification template="bb_code_tag_attach" modification_key="sv_lazyimageloader_bb_code_tag_attach" description="Lazy Image Loader" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#(<img\s+src=")([^"]*)(".*?class="[^"]*)("\s*?/>)#is]]></find>
-      <replace><![CDATA[$1<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='$2' />$3 <xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerCss' params='{xen:array 'full={$full}', 'attachment={$attachment}', 'extra=$4', 'noscript={$1$2$3$4}'}' />]]></replace>
+      <replace><![CDATA[$1<xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerUrl' params='{xen:array 'url=$2', 'width={$attachment.width}', 'height={$attachment.height}'}' />$3 <xen:callback class='SV_LazyImageLoader_Helper' method='getLazySpinnerCss' params='{xen:array 'full={$full}', 'attachment={$attachment}', 'extra=$4', 'noscript={$1$2$3$4}'}' />]]></replace>
     </modification>
     <modification template="bb_code.css" modification_key="sv_lazyimageloader_bb_codecss_1" description="Add NoJs support" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#$#]]></find>
