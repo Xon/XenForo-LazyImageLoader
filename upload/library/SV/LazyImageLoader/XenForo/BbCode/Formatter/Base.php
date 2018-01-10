@@ -2,9 +2,12 @@
 
 class SV_LazyImageLoader_XenForo_BbCode_Formatter_Base  extends XFCP_SV_LazyImageLoader_XenForo_BbCode_Formatter_Base
 {
+    /** @var string */
     static $lazy_imageTemplate = '<img data-src="%1$s" class="bbCodeImage%2$s lazyload" alt="[&#x200B;IMG]" data-url="%3$s" /><noscript><img src="%1$s" alt="[&#x200B;IMG]"></noscript>';
-    static $forceSpoilerTags = null;
-    static $lazyLoading = null;
+    /** @var bool|null */
+    static $forceSpoilerTags   = null;
+    /** @var bool|null */
+    static $lazyLoading        = null;
 
     public function __construct()
     {
@@ -20,6 +23,7 @@ class SV_LazyImageLoader_XenForo_BbCode_Formatter_Base  extends XFCP_SV_LazyImag
         {
             $this->_imageTemplate = self::$lazy_imageTemplate;
         }
+
         return parent::renderTagImage($tag, $rendererStates);
     }
 
@@ -39,6 +43,7 @@ class SV_LazyImageLoader_XenForo_BbCode_Formatter_Base  extends XFCP_SV_LazyImag
             $this->_imageTemplate = $temp;
             SV_LazyImageLoader_Helper::SetLazyLoadEnabled(false);
         }
+
         return $response;
     }
 }

@@ -2,6 +2,12 @@
 
 class SV_LazyImageLoader_Helper
 {
+    /**
+     * @param string                    $content
+     * @param array                     $params
+     * @param XenForo_Template_Abstract $template
+     * @return string
+     */
     public static function getLazySpinnerCss($content, $params, XenForo_Template_Abstract $template)
     {
         if (SV_LazyImageLoader_Helper::$enable_lazyloading)
@@ -19,12 +25,19 @@ class SV_LazyImageLoader_Helper
                     $css .= '" style="max-width:' . $attachment['thumbnail_width'] . 'px ';
                 }
             }
+
             return $css . @$params['extra'] . '<noscript>' . @$params['noscript'] . '</noscript>';
         }
 
         return @$params['extra'];
     }
 
+    /**
+     * @param string                    $content
+     * @param array                     $params
+     * @param XenForo_Template_Abstract $template
+     * @return string
+     */
     public static function getLazySpinnerUrl($content, $params, XenForo_Template_Abstract $template)
     {
         $originalUrl = is_array($params) ? $params['url'] : $params;
@@ -37,6 +50,7 @@ class SV_LazyImageLoader_Helper
                 $height = $params['height'];
                 $placeholder = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox%3D'0 0 {$width} {$height}'%2F%3E";
             }
+
             // Insert an SVG with proper aspect ratio to make responsive design work smoothly
             return $placeholder . '" data-src="' . $originalUrl;
         }
@@ -44,6 +58,7 @@ class SV_LazyImageLoader_Helper
         return $originalUrl;
     }
 
+    /** @var null|bool */
     static $enable_lazyloading = null;
 
     public static function SetLazyLoadEnabled($value)
@@ -51,15 +66,23 @@ class SV_LazyImageLoader_Helper
         SV_LazyImageLoader_Helper::$enable_lazyloading = $value;
     }
 
+    /**
+     * @return bool
+     */
     public static function IsLazyLoadEnabled()
     {
         if (SV_LazyImageLoader_Helper::$enable_lazyloading === null)
         {
             if (XenForo_Application::getOptions()->SV_LazyLoader_EnableDefault)
+            {
                 SV_LazyImageLoader_Helper::$enable_lazyloading = true;
+            }
             else
+            {
                 SV_LazyImageLoader_Helper::$enable_lazyloading = false;
+            }
         }
+
         return SV_LazyImageLoader_Helper::$enable_lazyloading;
     }
 }

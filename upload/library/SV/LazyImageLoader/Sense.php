@@ -1,0 +1,5 @@
+<?php
+
+class XFCP_SV_LazyImageLoader_XenForo_BbCode_Formatter_Base extends XenForo_BbCode_Formatter_Base {}
+class XFCP_SV_LazyImageLoader_XenForo_ControllerPublic_Conversation extends XenForo_ControllerPublic_Conversation {}
+class XFCP_SV_LazyImageLoader_XenForo_ControllerPublic_Thread extends XenForo_ControllerPublic_Thread {}
